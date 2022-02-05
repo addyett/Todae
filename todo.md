@@ -1,0 +1,5 @@
+- [ ] Design every single aspect (dummy) for what you think will be there.
+- [ ] Create flask backend as per the designs
+- [ ] Implement API wrapper in flutter 
+- [ ] Think suitable and confirm one state management solution. I guess, Provider has simplicity for this kind of functionality, or maybe setState will work ;)
+- [ ] View model / controller for UI update with API services

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class Note extends StatelessWidget {
@@ -64,65 +66,66 @@ class Note extends StatelessWidget {
   }
 }
 
-class StatefulNote extends StatefulWidget {
+class StatefulNote extends StatelessWidget {
   final bool priority;
   final bool completed;
   final String type;
   final String title;
+  final VoidCallback? onPriorityButtonTap;
+  final VoidCallback? onDoneTap;
+
   const StatefulNote(
       {Key? key,
       this.priority = false,
       this.completed = false,
       this.type = 'Note',
-      required this.title})
+      required this.title,
+      this.onPriorityButtonTap,
+      this.onDoneTap})
       : super(key: key);
 
   @override
-  _StatefulNoteState createState() => _StatefulNoteState();
-}
-
-class _StatefulNoteState extends State<StatefulNote> {
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 8,
-          ),
-          Container(
+    return Row(
+      children: [
+        const SizedBox(
+          width: 8,
+        ),
+        GestureDetector(
+          onTap: onPriorityButtonTap,
+          child: Container(
             height: 13,
             width: 13,
             decoration: BoxDecoration(
-              color: widget.priority ? Colors.black : Colors.amber[600],
+              color: priority ? Colors.black : Colors.amber[600],
               border: Border.all(
                 color: Colors.black,
                 width: 2.25,
               ),
-              borderRadius: widget.type == 'Note'
+              borderRadius: type == 'Note'
                   ? const BorderRadius.all(Radius.circular(10))
                   : const BorderRadius.all(Radius.circular(2)),
             ),
           ),
-          const SizedBox(
-            width: 12,
-          ),
-          Text(
-            widget.title,
+        ),
+        const SizedBox(
+          width: 12,
+        ),
+        GestureDetector(
+          onTap: onDoneTap,
+          child: Text(
+            title,
             style: TextStyle(
               fontFamily: 'RobotoMono',
-              decoration: widget.completed
-                  ? TextDecoration.lineThrough
-                  : TextDecoration.none,
+              decoration:
+                  completed ? TextDecoration.lineThrough : TextDecoration.none,
               decorationThickness: 2,
               fontSize: 16,
-              fontWeight:
-                  widget.completed ? FontWeight.normal : FontWeight.w900,
+              fontWeight: completed ? FontWeight.normal : FontWeight.w900,
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -161,8 +164,47 @@ class TopRow extends StatelessWidget {
   }
 }
 
-class Clock extends StatelessWidget {
+class Clock extends StatefulWidget {
   const Clock({Key? key}) : super(key: key);
+
+  @override
+  State<Clock> createState() => _ClockState();
+}
+
+class _ClockState extends State<Clock> {
+  int hour = 0;
+  int minuteFirst = 0;
+  int minuteSecond = 0;
+
+  @override
+  void initState() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      final current = DateTime.now();
+      if (current.hour != hour) {
+        setState(() {
+          hour = current.hour;
+        });
+      }
+      final currentFirstMinute =
+          int.parse(current.minute.toString().padLeft(2, '0')[0]);
+      final currentSecondMinute =
+          int.parse(current.minute.toString().padLeft(2, '0')[1]);
+
+      if (currentFirstMinute != minuteFirst) {
+        setState(() {
+          minuteFirst = currentFirstMinute;
+          print(currentFirstMinute);
+        });
+      }
+      if (currentSecondMinute != minuteSecond) {
+        setState(() {
+          minuteSecond = currentSecondMinute;
+          print(minuteSecond);
+        });
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,18 +214,20 @@ class Clock extends StatelessWidget {
           Container(
             height: 50,
             width: 50,
-            // padding: const EdgeInsets.all(20),
+            // padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 3,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(30))),
-            child: const Align(
+              border: Border.all(
+                color: Colors.black,
+                width: 3,
+              ),
+              // shape: BoxShape.circle,
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Align(
               alignment: Alignment.center,
               child: Text(
-                '3',
-                style: TextStyle(
+                hour.toString().padLeft(2, '0'),
+                style: const TextStyle(
                     fontFamily: 'WorkSans',
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
@@ -204,16 +248,26 @@ class Clock extends StatelessWidget {
                   width: 3,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(30))),
-            child: const Align(
-              alignment: Alignment.center,
-              child: Text(
-                '3       8',
-                style: TextStyle(
-                    fontFamily: 'WorkSans',
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 22),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  minuteFirst.toString(),
+                  style: const TextStyle(
+                      fontFamily: 'WorkSans',
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 22),
+                ),
+                Text(
+                  minuteSecond.toString(),
+                  style: const TextStyle(
+                      fontFamily: 'WorkSans',
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 22),
+                ),
+              ],
             ),
           )
         ],

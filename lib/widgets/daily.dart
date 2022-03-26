@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todae/widgets.dart';
+import 'stateful_note.dart';
+
 
 Widget daily = Column(
   children: [

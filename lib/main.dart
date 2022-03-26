@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// import 'package:http/http.dart' as http;
-
-// use margin to the stateful note widget and use listview.builder instead of separator
-// have the stateful note into a container so that it's clickable and the button inside a seperate container with padding too
-
-import 'clock.dart';
-import 'todo_list.dart';
-import 'widgets.dart';
-import 'quote.dart';
+import 'widgets/top_row.dart';
+import 'widgets/clock.dart';
+import 'widgets/todo_list.dart';
+import 'widgets/quote.dart';
 
 void main() {
   runApp(const Todae());
@@ -18,7 +13,6 @@ void main() {
 class Todae extends StatelessWidget {
   const Todae({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -80,10 +74,3 @@ class TodaeHomePage extends StatelessWidget {
     );
   }
 }
-
-// class _TodaeHomePageState extends State<TodaeHomePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }

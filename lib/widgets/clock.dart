@@ -50,20 +50,17 @@ class _ClockState extends State<Clock> {
         Container(
           height: 50,
           width: 50,
-          // padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.black,
               width: 3,
             ),
-            // shape: BoxShape.circle,
             borderRadius: const BorderRadius.all(Radius.circular(30)),
           ),
           child: Align(
             alignment: Alignment.center,
             child: Text(
               (hour % 12).toString(),
-              // hour.toString().padLeft(2, '0'),
               style: const TextStyle(
                   fontFamily: 'WorkSans',
                   fontWeight: FontWeight.w900,
@@ -78,7 +75,6 @@ class _ClockState extends State<Clock> {
         Container(
           height: 50,
           width: 110,
-          // padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.black,
